@@ -22,7 +22,6 @@ public class BigClass {
 
     public void setNumber(int number) {
         if (number > 0) {
-            System.out.println("No thanks");
             this.number = number;
         } else {
             return;
