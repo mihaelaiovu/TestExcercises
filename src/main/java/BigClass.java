@@ -46,7 +46,7 @@ public class BigClass {
 
     public String textToNullMethod() {
         this.text = null;
-        return text;
+        return null;
 
     }
 
