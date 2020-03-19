@@ -89,7 +89,7 @@ Select valid dates
 
 
 Submit book car
-        Click Button                        id:carSelect1
+        Click button                        id:carSelect1
 
 Write card details
         Card number
@@ -147,20 +147,6 @@ Unbook all cars if they exist
         :FOR  ${iteration}  IN RANGE      1        (${no_of_booked_cars})
         \     Unbook car
 
-
-Verify the right car is booked
-
-        ${order_id} =                   Get Text     id:order1
-        Should Not Be Equal             ${order_id}   ${EMPTY}
-
-        ${make_id} =                    Get Text     id:make1
-        Should Be Equal                 ${make_id}   Audi
-
-        ${model_id} =                   Get Text     id:model1
-        Should Be Equal                 ${model_id}   TT
-
-        ${passengers_id} =              Get Text     id:passengers1
-        Should Be Equal                 ${passengers_id}   2
 
 End Web Test
         Close Browser
