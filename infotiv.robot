@@ -121,6 +121,7 @@ Book car
         Unbook all my booked cars
         Select valid dates
         Choose a car
+        Sleep     1s
         Submit book car
         Write card details
 
@@ -225,6 +226,7 @@ Car booking
     [Tags]                                  book_car
     Book car
     Go to My Page
+    Sleep                                   1s
     Wait Until Page Contains Element        xpath://*[@id="middlepane"]/table/tbody/tr[2]
     Unbook car
     Wait Until Page Contains                You have no bookings
