@@ -1,6 +1,5 @@
 *** Settings ***
 Documentation           The information about the testsuite
-Resource                ../Resources/keywords.robot
 Library                 SeleniumLibrary
 
 Test Setup             Begin Web Test
@@ -13,6 +12,158 @@ ${URL}=  http://rental17.infotiv.net
 ${VALID EMAIL}=  iovu.mihaela@hotmail.com
 ${VALID PASSWORD}=  infotivselenium
 
+*** Keywords ***
+
+Begin Web Test
+        Open Browser                    about:blank  ${BROWSER}
+        Maximize Browser Window
+
+Go To Start Page
+        Load Page
+        Verify Page Loaded
+
+Load Page
+        Go To                           ${URL}
+
+Verify Page Loaded
+        ${link_text} =                  Get Text  xpath://*[@id="title"]
+        Should Be Equal                 ${link_text}  Infotiv Car Rental
+
+Go to My Page
+        Click button                        xpath://*[@id="mypage"]
+
+Login
+        [Arguments]                         ${email}        ${password}
+        Input text                          id:email   ${email}
+        Input text                          id:password    ${password}
+        Click button                        xpath://*[@id="login"]
+
+Choose a car
+        List car models
+        Select car model
+        List number of passengers
+        Select number of passengers
+
+List car models
+        Click button                        xpath://*[@id="ms-list-1"]/button
+
+Select car model
+        Select checkbox                     xpath://*[@id="ms-opt-1"]
+
+List number of passengers
+        Click button                        xpath://*[@id="ms-list-2"]/button
+
+Select number of passengers
+        Select checkbox                     xpath://*[@id="ms-opt-5"]
+
+Verify car model
+        ${actual_model}=                    Get Text  xpath://*[@id="ms-list-1"]/button/span
+        Should be Equal                     ${actual_model}    Audi
+
+Verify number of passengers
+        ${actual_persons}=                  Get Text  xpath://*[@id="ms-list-2"]/button/span
+        Should Be Equal                     ${actual_persons}     2
+
+Choose a nonexisting car
+        List car models
+        Select checkbox                      xpath://*[@id="ms-opt-4"]
+        List number of passengers
+        Select number of passengers
+
+Select invalid start date
+        ${start_date}=                      Get Time        day month  now-1 day
+        Input text                          id:start  ${start_date}
+        Click button                        id:continue
+
+Select invalid end date
+        ${end_date}=                        Get Time        day month       now+32 day
+        Input text                          id:end    ${end_date}
+        Click button                        id:continue
+
+Select valid dates
+        ${start_date}=                      Get Time        day month       now+10 day
+        ${end_date}=                        Get Time        day month       now+20 day
+        Input text                          id:start  ${start_date}
+        Input text                          id:end    ${end_date}
+        Click button                        id:continue
+
+
+Submit book car
+        Click Button                        id:carSelect1
+
+Write card details
+        Card number
+        Card name
+        Card month
+        Card year
+        Card cvc
+        Submit card
+
+Card number
+        Input text                          id:cardNum      1234567891234567
+
+Card name
+        Input text                          id:fullName     M I
+
+Card month
+        Select From List By Index            xpath://*[@id="confirmSelection"]/form/select[1]   10
+
+Card year
+        Select From List By Index            xpath://*[@id="confirmSelection"]/form/select[2]  4
+
+Card cvc
+        Input text                          id:cvc          123
+
+Submit card
+        Click button                        id:confirm
+
+Book car
+        Unbook all my booked cars
+        Select valid dates
+        Choose a car
+        Submit book car
+        Write card details
+
+Click Home button
+        Click button                        id:home
+
+Unbook car
+        Click button                        xpath://*[@id="unBook1"]
+        Handle Alert
+        Go to My Page
+
+
+Unbook all my booked cars
+        Go To Start Page
+        Login                               ${VALID EMAIL}  ${VALID PASSWORD}
+        Go to My Page
+        Unbook all cars if they exist
+        Go to Start Page
+
+
+Unbook all cars if they exist
+        ${no_of_booked_cars}=     Get Element Count     xpath://*[@id="middlepane"]/table/tbody/tr
+        LOG TO CONSOLE   no_of_booked_cars ${no_of_booked_cars}
+        :FOR  ${iteration}  IN RANGE      1        (${no_of_booked_cars})
+        \     Unbook car
+
+
+Verify the right car is booked
+
+        ${order_id} =                   Get Text     id:order1
+        Should Not Be Equal             ${order_id}   ${EMPTY}
+
+        ${make_id} =                    Get Text     id:make1
+        Should Be Equal                 ${make_id}   Audi
+
+        ${model_id} =                   Get Text     id:model1
+        Should Be Equal                 ${model_id}   TT
+
+        ${passengers_id} =              Get Text     id:passengers1
+        Should Be Equal                 ${passengers_id}   2
+
+End Web Test
+        Close Browser
 
 *** Test Cases ***
 
