@@ -122,6 +122,7 @@ Book car
         Select valid dates
         Choose a car
         Sleep     1s
+        Click element                      id:questionText
         Submit book car
         Write card details
 
