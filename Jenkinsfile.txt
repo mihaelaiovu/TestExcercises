@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Test coverage report with Cobertura') {
             steps {
-                sh "mvn package cobertura:cobertura -Dcobertura.report.format=xml"
+                sh "mvn cobertura:cobertura"
             }
             post {
                 always {
